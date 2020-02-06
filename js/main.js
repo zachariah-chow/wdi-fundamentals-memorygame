@@ -1,16 +1,37 @@
 let cards = ["queen", "queen", "king", "king"];
 let cardsInPlay = [];
-let cardOne = cards[0];
-let cardTwo = cards[2];
 
-cardsInPlay.push(cardOne, cardTwo);
+function getRandomIntInclusive(min, max){
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min +1)) + min;
+}
 
-console.log(`User flipped ${cardsInPlay[1]}`);
+let winStatus = false;
 
-if (cardsInPlay.length === 2) {
-    if (cardsInPlay[0] === cardsInPlay[1]) {
-        alert("You found a match!");
+function checkWin() {
+    if (cardsInPlay.length >= 2) {
+        if (cardsInPlay[0] === cardsInPlay[1] || cardsInPlay [2]) {
+            alert("You found a match!");
+            winStatus = true;
+        } else {
+            alert("Sorry, try again.");
+        }
     } else {
-        alert("Sorry, try again.");
+        alert("Please flip another card.");
     }
 }
+
+function flipCard(cardId) {
+    if (winStatus === true) {
+        return;
+    } else {
+        console.log(`User flipped ${cards[cardId]}!`);
+        cardsInPlay.push(cards[cardId]);
+        cards.splice(cardId, 1);
+        checkWin();
+        flipCard(getRandomIntInclusive(0,cards.length - 1));
+    }
+}
+
+flipCard(0);
