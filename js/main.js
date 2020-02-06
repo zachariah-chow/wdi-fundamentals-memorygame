@@ -85,6 +85,7 @@ function resetButtonHandler() {
     cardElements.forEach(cardElement => {
         cardElement.addEventListener('click', flipCard);
     });
+    winStatus = false;
 }
 
 let resetButton = document.querySelector('button');
