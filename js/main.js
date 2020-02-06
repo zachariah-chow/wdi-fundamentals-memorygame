@@ -1,5 +1,3 @@
-// let cards = ["queen", "queen", "king", "king"];
-
 let cards = [
     {
         rank: "queen",
@@ -34,30 +32,60 @@ function getRandomIntInclusive(min, max){
 let winStatus = false;
 
 function checkForMatch() {
+    if (winStatus === true) {
+        return;
+    } else if (
+        cardsInPlay[0].rank === cardsInPlay[1].rank || 
+        cardsInPlay[0].rank === cardsInPlay[2].rank ||
+        cardsInPlay[1].rank === cardsInPlay[2].rank
+        ) {
+    alert("You found a match!");
+    winStatus = true;
+    } else {
+    alert("Sorry, try again.");
+    }
+}
+
+function flipCard() {
+    cardId = this.getAttribute('data-id');
+    this.setAttribute('src', cards[cardId].cardImage);
+    console.log(`User flipped ${cards[cardId].rank}!`);
+    this.removeEventListener('click', flipCard);
+    cardsInPlay.push(cards[cardId]);
     if (cardsInPlay.length >= 2) {
-        if (cardsInPlay[0].rank === cardsInPlay[1].rank || cardsInPlay[0].rank === cardsInPlay[cards.length - 1].rank) {
-        alert("You found a match!");
-        winStatus = true;
-        } else {
-        alert("Sorry, try again.");
+        try {
+            checkForMatch();
+        }
+        catch (err) {
+            return;
         }
     } else {
-        alert("Please flip another card.");
+        alert ("Please flip another card.");
     }
 }
 
-function flipCard(cardId) {
-    if (winStatus === true || cards.length === 0) {
-        return;
-    } else {
-        console.log(`User flipped ${cards[cardId].rank}!`);
-        console.log(`${cards[cardId].cardImage}`);
-        cardsInPlay.push(cards[cardId]);
-        cards.splice(cardId, 1);
-        checkForMatch();
+function createBoard() {
+    for (let i = 0; i < cards.length; i++) {
+       let cardElement = document.createElement('img');
+       cardElement.setAttribute('src', 'images/back.png');
+       cardElement.setAttribute('data-id', i);
+       cardElement.addEventListener('click', flipCard);
+       document.getElementById('game-board').appendChild(cardElement);
     }
+};
+
+createBoard();
+
+function resetButtonHandler() {
+    cardsInPlay = [];
+    const cardElements = [...document.getElementsByTagName('img')];
+    cardElements.forEach(cardElement => {
+    cardElement.setAttribute ('src', 'images/back.png');
+    });
+    cardElements.forEach(cardElement => {
+        cardElement.addEventListener('click', flipCard);
+    });
 }
 
-flipCard(0);
-flipCard(2);
-flipCard(1);
+let resetButton = document.querySelector('button');
+resetButton.addEventListener('click', resetButtonHandler);
