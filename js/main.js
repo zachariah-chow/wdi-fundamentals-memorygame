@@ -9,7 +9,7 @@ function getRandomIntInclusive(min, max){
 
 let winStatus = false;
 
-function checkWin() {
+function checkForMatch() {
     if (cardsInPlay.length >= 2) {
         if (cardsInPlay[0] === cardsInPlay[1] || cardsInPlay [2]) {
             alert("You found a match!");
@@ -29,7 +29,7 @@ function flipCard(cardId) {
         console.log(`User flipped ${cards[cardId]}!`);
         cardsInPlay.push(cards[cardId]);
         cards.splice(cardId, 1);
-        checkWin();
+        checkForMatch();
         flipCard(getRandomIntInclusive(0,cards.length - 1));
     }
 }
